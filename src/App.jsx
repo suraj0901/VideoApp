@@ -1,6 +1,6 @@
 import Name from './Name';
 import { Peer } from 'peerjs';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Call from './Call';
 import Video from './Video';
 
@@ -11,8 +11,10 @@ function App() {
   const [userName, setUserName] = useState(undefined);
   const [callerName, setCallerName] = useState(undefined);
   const handleName = (name) => {
-    setPerr(new Peer(name));
-    setUserName(name);
+    const p = new Peer(undefined);
+    setPerr(p);
+    console.log(p.id);
+    setUserName(userName);
   };
 
   const handleCall = (callerName) => {
@@ -20,17 +22,10 @@ function App() {
     navigator.mediaDevices.getUserMedia(
       { video: true, audio: true },
       (stream) => {
-        const call = peer.call(callerName, stream);
         selfVideo.current.srcObject = stream;
-        // selfVideo.current.addEventListener('loadedmetadata', () => {
-        //   selfVideo.current.play();
-        // });
+        const call = peer.call(callerName, stream);
         call.on('stream', (remoteStream) => {
-          // Show stream in some <video> element.
           otherVideo.current.srcObject = remoteStream;
-          otherVideo.current.addEventListener('loadedmetadata', () => {
-            otherVideo.current.play();
-          });
         });
       },
       (err) => {
@@ -39,14 +34,14 @@ function App() {
       }
     );
   };
-
   return (
     <div className="flex font-sans font-semibold justify-center items-center min-h-[100vh]">
       <div>
         {userName && <h2>Hi {userName}</h2>}
+        {callerName && <p>calling {callerName}</p>}
         {!userName && <Name {...{ handleName }} />}
-        {userName && !callerName && <Call {...{ handleCall, userName }} />}
-        {callerName && <Video {...{ otherVideo, peer, selfVideo }} />}
+        {userName && !callerName && <Call {...{ handleCall }} />}
+        {userName && <Video {...{ otherVideo, peer, selfVideo }} />}
       </div>
     </div>
   );
