@@ -1,17 +1,23 @@
-const Call = ({ handleCall, name }) => {
+import { useState } from 'react';
+
+const Call = ({ handleCall }) => {
+  const [callerName, setCallerName] = useState('');
+  const handleSubmit = () => {
+    handleCall(callerName);
+    setCallerName('');
+  };
   return (
-    <div>
-      <h2>Hi {name}</h2>
-      <div>
-        <input
-          className="px-4 py-2 rounded-full border"
-          type="text"
-          placeholder="Enter name"
-        />
-        <button className="px-4 py-2 rounded-full border" onClick={handleCall}>
-          Call
-        </button>
-      </div>
+    <div className="flex gap-2">
+      <input
+        className="px-4 py-2 rounded-full border"
+        type="text"
+        placeholder="Enter name"
+        value={callerName}
+        onChange={(e) => setCallerName(e.target.value)}
+      />
+      <button className="px-4 py-2 rounded-full border" onClick={handleSubmit}>
+        Call
+      </button>
     </div>
   );
 };
