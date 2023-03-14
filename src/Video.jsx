@@ -11,6 +11,9 @@ const Video = ({ peer, otherVideo, selfVideo }) => {
           call.on('stream', (remoteStream) => {
             // Show stream in some <video> element.
             otherVideo.current.srcObject = remoteStream;
+            otherVideo.current.addEventListener('loadedmetadata', () => {
+              otherVideo.current.play();
+            });
           });
         },
         (err) => {
@@ -22,8 +25,18 @@ const Video = ({ peer, otherVideo, selfVideo }) => {
   }, []);
   return (
     <div>
-      <video ref={otherVideo} width={500} height={500} />
-      <video ref={selfVideo} width={200} height={200} />
+      <video
+        className="border-2 border-black"
+        ref={otherVideo}
+        width={500}
+        height={500}
+      />
+      <video
+        className="border-2 border-black"
+        ref={selfVideo}
+        width={200}
+        height={200}
+      />
     </div>
   );
 };

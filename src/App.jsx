@@ -22,9 +22,15 @@ function App() {
       (stream) => {
         const call = peer.call(callerName, stream);
         selfVideo.current.srcObject = stream;
+        // selfVideo.current.addEventListener('loadedmetadata', () => {
+        //   selfVideo.current.play();
+        // });
         call.on('stream', (remoteStream) => {
           // Show stream in some <video> element.
           otherVideo.current.srcObject = remoteStream;
+          otherVideo.current.addEventListener('loadedmetadata', () => {
+            otherVideo.current.play();
+          });
         });
       },
       (err) => {
